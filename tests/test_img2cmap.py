@@ -22,7 +22,7 @@ class Test_Imageconverter_local:
 
     def test_generate_cmap_3(self, imageconverter):
         cmap = imageconverter.generate_cmap(4, None, 42)
-        assert cmap.name == "miami_skyline"
+        assert cmap.name == "south_beach_sunset"
 
     def test_generate_cmap_4(self, imageconverter):
         with pytest.raises(ValueError):
