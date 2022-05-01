@@ -4,19 +4,15 @@ img2cmap
 
 Create colormaps from images in two lines of code!
 
-.. image:: tests/images/south_beach_sunset.jpg
-    :align: center
-
-First, `ImageConverter` class converts images to arrays of RGB values.
-Then, `generate_cmap` creates a matplotlib ListedColormap.
-https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib-colors-listedcolormap
+| First, ``ImageConverter`` class converts images to arrays of RGB values.
+| Then, ``generate_cmap`` creates a matplotlib `ListedColormap <https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib-colors-listedcolormap>`_.
 
 .. code-block:: python3
 
     from img2cmap import ImageConverter
 
     converter = ImageConverter("tests/images/south_beach_sunset.jpg")
-    colormap = converter.generate_cmap(n_colors=5, palette_name="south_beach_sunset", random_state=42)
+    cmap = converter.generate_cmap(n_colors=5, palette_name="south_beach_sunset", random_state=42)
 
 
 Plot an image and a colorbar side by side.
