@@ -11,6 +11,7 @@ img2cmap
 
     from img2cmap import ImageConverter
 
+    # Can be a local file or URL
     converter = ImageConverter("tests/images/south_beach_sunset.jpg")
     cmap = converter.generate_cmap(n_colors=5, palette_name="south_beach_sunset", random_state=42)
 

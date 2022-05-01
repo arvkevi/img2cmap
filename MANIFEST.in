@@ -12,7 +12,7 @@ include .pre-commit-config.yaml
 include .readthedocs.yml
 include pytest.ini
 include tox.ini
-include tests/images/miami_skyline.webp
+recursive-include images *.png
 
 include AUTHORS.rst
 include CHANGELOG.rst
