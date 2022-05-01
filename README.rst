@@ -2,7 +2,7 @@
 img2cmap
 ========
 
-Create colormaps from images in two lines of code!
+**Create colormaps from images in three lines of code!**
 
 | First, ``ImageConverter`` class converts images to arrays of RGB values.
 | Then, ``generate_cmap`` creates a matplotlib `ListedColormap <https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib-colors-listedcolormap>`_.
@@ -22,14 +22,14 @@ Plot an image and a colorbar side by side.
     import matplotlib.pyplot as plt
     from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(7, 5))
 
     ax.axis("off")
     img = plt.imread("tests/images/south_beach_sunset.jpg")
     im = ax.imshow(img, cmap=cmap)
 
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cax = divider.append_axes("right", size="10%", pad=0.05)
 
     cb = fig.colorbar(im, cax=cax, orientation="vertical", label=cmap.name)
     cb.set_ticks([])
