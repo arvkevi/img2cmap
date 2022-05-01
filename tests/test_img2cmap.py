@@ -10,7 +10,7 @@ THIS_DIR = Path(__file__).parent
 class Test_Imageconverter_local:
     @pytest.fixture()
     def imageconverter(self):
-        return ImageConverter(THIS_DIR.joinpath("images/miami_skyline.webp"))
+        return ImageConverter(THIS_DIR.joinpath("images/south_beach_sunset.jpg"))
 
     def test_generate_cmap_1(self, imageconverter):
         cmap = imageconverter.generate_cmap(4, "miami", 42)
