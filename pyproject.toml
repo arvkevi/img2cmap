@@ -2,9 +2,13 @@
 requires = [
     "setuptools>=30.3.0",
     "wheel",
+    "matplotlib",
+    "scikit-learn",
+    "numpy",
+    "pillow",
 ]
 
 [tool.black]
 line-length = 140
 target-version = ['py36']
-skip-string-normalization = true
+skip-string-normalization = false
