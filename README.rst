@@ -1,6 +1,58 @@
 ========
-Overview
+img2cmap
 ========
+
+Create colormaps from images in two lines of code!
+
+First, `ImageConverter` class converts images to arrays of RGB values.
+Then, `generate_cmap` creates a matplotlib colormap.
+
+.. code-block:: python3
+
+    from img2cmap import ImageConverter
+
+    converter = ImageConverter("tests/images/miami_skyline.webp")
+    colormap = converter.generate_cmap(n_colors=4, palette_name="miami", random_state=42)
+
+Now, use the colormap in your plots!
+
+.. code-block:: python3
+
+    import matplotlib.pyplot as plt
+
+    colors = colormap.colors
+
+    with plt.style.context("dark_background"):
+        for i, color in enumerate(colors):
+            plt.plot(range(10), [_+i+1 for _ in range(10)], color=color, linewidth=4)
+
+
+.. image:: images/img2cmap_demo.png
+    :align: center
+
+
+Installation
+============
+
+::
+
+    pip install img2cmap
+
+You can also install the in-development version with::
+
+    pip install https://github.com/arvkevi/img2cmap/archive/main.zip
+
+
+Documentation
+=============
+
+
+https://img2cmap.readthedocs.io/
+
+
+Status
+======
+
 
 .. start-badges
 
@@ -47,35 +99,9 @@ Overview
     :alt: Supported implementations
     :target: https://pypi.org/project/img2cmap
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/arvkevi/img2cmap/v0.0.0.svg
-    :alt: Commits since latest release
-    :target: https://github.com/arvkevi/img2cmap/compare/v0.0.0...main
-
 
 
 .. end-badges
-
-Create colormaps from images
-
-* Free software: MIT license
-
-Installation
-============
-
-::
-
-    pip install img2cmap
-
-You can also install the in-development version with::
-
-    pip install https://github.com/arvkevi/img2cmap/archive/main.zip
-
-
-Documentation
-=============
-
-
-https://img2cmap.readthedocs.io/
 
 
 Development
