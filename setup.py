@@ -30,7 +30,7 @@ setup(
     author="Kevin Arvai",
     author_email="arvkevi@gmail.com",
     url="https://github.com/arvkevi/img2cmap",
-    packages=find_packages("src"),
+    packages=find_packages("src", exclude=["docs", "tests*"]),
     package_dir={"": "src"},
     py_modules=[splitext(basename(path))[0] for path in glob("src/*.py")],
     include_package_data=True,
