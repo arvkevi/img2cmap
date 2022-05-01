@@ -26,13 +26,11 @@ class ImageConverter:
         # try to open the image
         try:
             self.image = Image.open(self.image_path)
-        except FileNotFoundError as fnf_error:
+        except FileNotFoundError:
             try:
                 self.image = Image.open(urlopen(self.image_path))
-            except (URLError, HTTPError) as url_error:
-                raise URLError(f"Could not open {self.image_path} {url_error}") from url_error
-
-            raise FileNotFoundError(f"File {self.image_path} not found {fnf_error}") from fnf_error
+            except (URLError, HTTPError, FileNotFoundError) as error:
+                raise URLError(f"Could not open {self.image_path} {error}") from error
 
         # convert the image to a numpy array
         self.pixels = np.array(self.image.getdata())

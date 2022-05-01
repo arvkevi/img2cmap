@@ -4,15 +4,42 @@ img2cmap
 
 Create colormaps from images in two lines of code!
 
+.. image:: tests/images/south_beach_sunset.jpg
+    :align: center
+
 First, `ImageConverter` class converts images to arrays of RGB values.
-Then, `generate_cmap` creates a matplotlib colormap.
+Then, `generate_cmap` creates a matplotlib ListedColormap.
+https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib-colors-listedcolormap
 
 .. code-block:: python3
 
     from img2cmap import ImageConverter
 
-    converter = ImageConverter("tests/images/miami_skyline.webp")
-    colormap = converter.generate_cmap(n_colors=4, palette_name="miami", random_state=42)
+    converter = ImageConverter("tests/images/south_beach_sunset.jpg")
+    colormap = converter.generate_cmap(n_colors=5, palette_name="south_beach_sunset", random_state=42)
+
+
+Plot an image and a colorbar side by side.
+
+.. code-block:: python3
+
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+    fig, ax = plt.subplots()
+
+    ax.axis("off")
+    img = plt.imread("tests/images/south_beach_sunset.jpg")
+    im = ax.imshow(img, cmap=cmap)
+
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+
+    cb = fig.colorbar(im, cax=cax, orientation="vertical", label=cmap.name)
+    cb.set_ticks([])
+
+.. image:: images/colorbar.png
+    :align: center
 
 Now, use the colormap in your plots!
 
@@ -25,7 +52,6 @@ Now, use the colormap in your plots!
     with plt.style.context("dark_background"):
         for i, color in enumerate(colors):
             plt.plot(range(10), [_+i+1 for _ in range(10)], color=color, linewidth=4)
-
 
 .. image:: images/img2cmap_demo.png
     :align: center
