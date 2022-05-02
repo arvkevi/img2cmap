@@ -89,7 +89,6 @@ Status
         | |codecov|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
-        | |commits-since|
 .. |docs| image:: https://readthedocs.org/projects/img2cmap/badge/?style=flat
     :target: https://img2cmap.readthedocs.io/
     :alt: Documentation Status
@@ -97,10 +96,6 @@ Status
 .. |github-actions| image:: https://github.com/arvkevi/img2cmap/actions/workflows/github-actions.yml/badge.svg
     :alt: GitHub Actions Build Status
     :target: https://github.com/arvkevi/img2cmap/actions
-
-.. |requires| image:: https://requires.io/github/arvkevi/img2cmap/requirements.svg?branch=main
-    :alt: Requirements Status
-    :target: https://requires.io/github/arvkevi/img2cmap/requirements/?branch=main
 
 .. |codecov| image:: https://codecov.io/gh/arvkevi/img2cmap/branch/main/graphs/badge.svg?branch=main
     :alt: Coverage Status

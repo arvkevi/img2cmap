@@ -12,7 +12,7 @@ include .pre-commit-config.yaml
 include .readthedocs.yml
 include pytest.ini
 include tox.ini
-recursive-include images *.png
+recursive-include images *
 
 include AUTHORS.rst
 include CHANGELOG.rst
