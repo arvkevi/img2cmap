@@ -85,7 +85,7 @@ Status
     * - docs
       - |docs|
     * - tests
-      - | |github-actions| |requires|
+      - | |github-actions|
         | |codecov|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
