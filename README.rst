@@ -44,7 +44,7 @@ Now, use the colormap in your plots!
 
     import matplotlib.pyplot as plt
 
-    colors = colormap.colors
+    colors = cmap.colors
 
     with plt.style.context("dark_background"):
         for i, color in enumerate(colors):
