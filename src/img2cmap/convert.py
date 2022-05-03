@@ -59,6 +59,9 @@ class ImageConverter:
         # return the palette
         if palette_name is None:
             palette_name = Path(self.image_path).stem
+
         cmap = mpl.colors.ListedColormap(centroids, name=palette_name)
 
+        # Handle 4 dimension RGBA colors
+        cmap.colors = cmap.colors[:, :3]
         return cmap
