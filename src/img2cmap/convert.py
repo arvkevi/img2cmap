@@ -33,7 +33,10 @@ class ImageConverter:
                 raise URLError(f"Could not open {self.image_path} {error}") from error
 
         # convert the image to a numpy array
+        self.image = self.image.convert("RGBA")
         self.pixels = np.array(self.image.getdata())
+        self.pixels = self.pixels[:, :3]
+        self.kmeans = None
 
     def generate_cmap(self, n_colors=4, palette_name=None, random_state=None):
         """Generates a matplotlib ListedColormap from an image.

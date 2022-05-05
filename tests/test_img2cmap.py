@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import matplotlib as mpl
 import pytest
 
 from img2cmap import ImageConverter
@@ -45,16 +46,12 @@ def test_cmap_color_dimension(test_image_input):
     assert cmap.colors.shape[1] == 3
 
 
-# class Test_Imageconverter_url:
-#     @pytest.fixture()
-#     def imageconverter(self):
-#         return ImageConverter("data/test_img2cmap.png")
-
-#     def test_generate_cmap_1(self, imageconverter):
-#         cmap = imageconverter.generate_palette(4, "", 42)
-
-#     def test_generate_cmap_2(self, imageconverter):
-#         imageconverter.generate_palette(4, "", 42)
-
-#     def test_generate_cmap_3(self, imageconverter):
-#         imageconverter.generate_palette(-100, "1.0.0", 42)
+def test_url():
+    with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
+        for line in f:
+            if "miami" in line:
+                url = line.strip()
+                break
+    converter = ImageConverter(url)
+    cmap = converter.generate_cmap(2, "miami", 42)
+    assert cmap.name == "miami"
