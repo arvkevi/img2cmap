@@ -1,5 +1,6 @@
 from pathlib import Path
 
+# import matplotlib as mpl
 import pytest
 
 from img2cmap import ImageConverter
@@ -45,16 +46,33 @@ def test_cmap_color_dimension(test_image_input):
     assert cmap.colors.shape[1] == 3
 
 
-# class Test_Imageconverter_url:
-#     @pytest.fixture()
-#     def imageconverter(self):
-#         return ImageConverter("data/test_img2cmap.png")
+# TODO: Mock these!
+# def test_url():
+#     with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
+#         for line in f:
+#             if "miami" in line:
+#                 url = line.strip()
+#                 break
+#     converter = ImageConverter(url)
+#     cmap = converter.generate_cmap(2, "miami", 42)
+#     assert cmap.name == "miami"
 
-#     def test_generate_cmap_1(self, imageconverter):
-#         cmap = imageconverter.generate_palette(4, "", 42)
 
-#     def test_generate_cmap_2(self, imageconverter):
-#         imageconverter.generate_palette(4, "", 42)
+# @pytest.mark.parametrize("test_remove_transparent", [True, False])
+# def test_remove_transparent(test_remove_transparent):
+#     """This image should not have any black pixels."""
+#     with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
+#         for line in f:
+#             if "atlanta" in line:
+#                 url = line.strip()
+#     converter = ImageConverter(url, remove_transparent=test_remove_transparent)
+#     cmap = converter.generate_cmap(3, 42)
+#     hex_codes = [mpl.colors.rgb2hex(c) for c in cmap.colors]
+#     black_not_in_colors = not any(["#000000" in c for c in hex_codes])
+#     assert black_not_in_colors == test_remove_transparent
 
-#     def test_generate_cmap_3(self, imageconverter):
-#         imageconverter.generate_palette(-100, "1.0.0", 42)
+
+def test_generate_optimal():
+    imageconverter = ImageConverter(THIS_DIR.joinpath("images/south_beach_sunset.jpg"))
+    _, best_n_colors, _ = imageconverter.generate_optimal_cmap(random_state=42)
+    assert best_n_colors == 5
