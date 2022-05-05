@@ -91,9 +91,11 @@ class ImageConverter:
 
         Returns:
 
-            dict: A dictionary of matplotlib ListedColormap objects. Keys are the number of colors (clusters). Values are ListedColormap objects.
+            dict: A dictionary of matplotlib ListedColormap objects.
+            Keys are the number of colors (clusters). Values are ListedColormap objects.
             int: The optimal number of colors.
-            dict: A dictionary of the sum of square distances from each point to the cluster center. Keys are the number of colors (clusters) and values are the SSD value.
+            dict: A dictionary of the sum of square distances from each point to the cluster center.
+            Keys are the number of colors (clusters) and values are the SSD value.
         """
         ssd = dict()
         cmaps = dict()
