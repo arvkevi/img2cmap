@@ -46,15 +46,16 @@ def test_cmap_color_dimension(test_image_input):
     assert cmap.colors.shape[1] == 3
 
 
-def test_url():
-    with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
-        for line in f:
-            if "miami" in line:
-                url = line.strip()
-                break
-    converter = ImageConverter(url)
-    cmap = converter.generate_cmap(2, "miami", 42)
-    assert cmap.name == "miami"
+# TODO: Mock these!
+# def test_url():
+#     with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
+#         for line in f:
+#             if "miami" in line:
+#                 url = line.strip()
+#                 break
+#     converter = ImageConverter(url)
+#     cmap = converter.generate_cmap(2, "miami", 42)
+#     assert cmap.name == "miami"
 
 
 @pytest.mark.parametrize("test_remove_transparent", [True, False])
