@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import matplotlib as mpl
+# import matplotlib as mpl
 import pytest
 
 from img2cmap import ImageConverter
