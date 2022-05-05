@@ -70,6 +70,7 @@ setup(
         "scikit-learn",
         "numpy",
         "pillow",
+        "kneed",
     ],
     extras_require={
         "dev": [

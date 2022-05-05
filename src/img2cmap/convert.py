@@ -5,6 +5,7 @@ from urllib.request import urlopen
 
 import matplotlib as mpl
 import numpy as np
+from kneed import KneeLocator
 from PIL import Image
 from sklearn.cluster import MiniBatchKMeans
 
@@ -57,11 +58,11 @@ class ImageConverter:
             matplotlib.colors.ListedColormap: A matplotlib ListedColormap object.
         """
         # create a kmeans model
-        kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=random_state)
+        self.kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=random_state)
         # fit the model to the pixels
-        kmeans.fit(self.pixels)
+        self.kmeans.fit(self.pixels)
         # get the cluster centers
-        centroids = kmeans.cluster_centers_ / 255
+        centroids = self.kmeans.cluster_centers_ / 255
         # return the palette
         if palette_name is None:
             palette_name = Path(self.image_path).stem
@@ -71,3 +72,36 @@ class ImageConverter:
         # Handle 4 dimension RGBA colors
         cmap.colors = cmap.colors[:, :3]
         return cmap
+
+    def generate_optimal_cmap(self, max_colors=10, palette_name=None, random_state=None):
+        """Generates an optimal matplotlib ListedColormap from an image by finding the optimal number of clusters using the elbow method.
+
+        Useage:
+            >>> img = ImageConverter("path/to/image.png")
+            >>> cmaps, best_n_colors, ssd = img.generate_optimal_cmap()
+            >>> # The optimal colormap
+            >>> cmaps[best_n_colors]
+
+
+        Args:
+            max_colors (int, optional): _description_. Defaults to 10.
+            palette_name (_type_, optional): _description_. Defaults to None.
+            random_state (_type_, optional): _description_. Defaults to None.
+            remove_background (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+
+            dict: A dictionary of matplotlib ListedColormap objects. Keys are the number of colors (clusters). Values are ListedColormap objects.
+            int: The optimal number of colors.
+            dict: A dictionary of the sum of square distances from each point to the cluster center. Keys are the number of colors (clusters) and values are the SSD value.
+        """
+        ssd = dict()
+        cmaps = dict()
+        for n_colors in range(2, max_colors + 1):
+            cmap = self.generate_cmap(n_colors=n_colors, palette_name=palette_name, random_state=random_state)
+            cmaps[n_colors] = cmap
+            ssd[n_colors] = self.kmeans.inertia_
+
+        best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
+
+        return cmaps, best_n_colors, ssd

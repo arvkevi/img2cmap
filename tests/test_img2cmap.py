@@ -69,3 +69,9 @@ def test_remove_transparent(test_remove_transparent):
     hex_codes = [mpl.colors.rgb2hex(c) for c in cmap.colors]
     black_not_in_colors = not any(["#000000" in c for c in hex_codes])
     assert black_not_in_colors == test_remove_transparent
+
+
+def test_generate_optimal():
+    imageconverter = ImageConverter(THIS_DIR.joinpath("images/south_beach_sunset.jpg"))
+    _, best_n_colors, _ = imageconverter.generate_optimal_cmap(random_state=42)
+    assert best_n_colors == 5
