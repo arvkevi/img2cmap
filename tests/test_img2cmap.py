@@ -55,3 +55,17 @@ def test_url():
     converter = ImageConverter(url)
     cmap = converter.generate_cmap(2, "miami", 42)
     assert cmap.name == "miami"
+
+
+@pytest.mark.parametrize("test_remove_transparent", [True, False])
+def test_remove_transparent(test_remove_transparent):
+    """This image should not have any black pixels."""
+    with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
+        for line in f:
+            if "atlanta" in line:
+                url = line.strip()
+    converter = ImageConverter(url, remove_transparent=test_remove_transparent)
+    cmap = converter.generate_cmap(3, 42)
+    hex_codes = [mpl.colors.rgb2hex(c) for c in cmap.colors]
+    black_not_in_colors = not any(["#000000" in c for c in hex_codes])
+    assert black_not_in_colors == test_remove_transparent
