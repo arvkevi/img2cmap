@@ -1,2 +1,2 @@
 streamlit
-git+https://github.com/arvkevi/img2cmap@releases/tag/v0.2.0#egg=img2cmap
+git+https://github.com/arvkevi/img2cmap@main#egg=img2cmap
