@@ -16,14 +16,16 @@ class ImageConverter:
     Args:
         image_path str: The path to the image. Can be a local file or a URL.
         remove_transparent bool: If True, will not consider any transparent pixels. Defaults to False.
+        downsample bool: If True, will downsample the image to 512x512. Defaults to True.
 
     Attributes:
         image_path (str): The path to the image. Can be a local file or a URL.
         image (PIL.Image): The image object.
         pixels (numpy.ndarray): A numpy array of RGB values.
+        kmeans (sklearn.cluster.MiniBatchKMeans): A kmeans model.
     """
 
-    def __init__(self, image_path, remove_transparent=False):
+    def __init__(self, image_path, remove_transparent=False, downsample=True):
         self.image_path = image_path
         # try to open the image
         try:
@@ -34,6 +36,9 @@ class ImageConverter:
             except (URLError, HTTPError, FileNotFoundError) as error:
                 raise URLError(f"Could not open {self.image_path} {error}") from error
 
+        # downsample the image with antialiasing, inplace
+        if downsample:
+            self.image.thumbnail((512, 512), Image.LANCZOS)
         # convert the image to a numpy array
         self.image = self.image.convert("RGBA")
         self.pixels = np.array(self.image.getdata())
