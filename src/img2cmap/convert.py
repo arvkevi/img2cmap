@@ -15,7 +15,13 @@ class ImageConverter:
 
     Args:
         image_path str: The path to the image. Can be a local file or a URL.
-        remove_transparent bool: If True, will not consider any transparent pixels. Defaults to False.
+        resize (tuple or bool, optional): If a tuple, the max size (w x h)
+         to resize the image to. If True, resizes the image to a max (256, 256).
+         If False, uses the original image size.
+        Uses https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.thumbnail to resize the image.
+        Preserves theh aspect ratio. Defaults to True.
+        remove_transparent bool: If True, will not consider any transparent pixels.
+        Defaults to False.
 
     Attributes:
         image_path (str): The path to the image. Can be a local file or a URL.
@@ -23,7 +29,7 @@ class ImageConverter:
         pixels (numpy.ndarray): A numpy array of RGB values.
     """
 
-    def __init__(self, image_path, remove_transparent=False):
+    def __init__(self, image_path, resize=True, remove_transparent=False):
         self.image_path = image_path
         # try to open the image
         try:
@@ -36,6 +42,10 @@ class ImageConverter:
 
         # convert the image to a numpy array
         self.image = self.image.convert("RGBA")
+        if resize is True:
+            self.image.thumbnail((256, 256), Image.LANCZOS)
+        elif resize is not False:
+            self.image.thumbnail(resize, Image.LANCZOS)
         self.pixels = np.array(self.image.getdata())
         if remove_transparent:
             self.pixels = self.pixels[self.pixels[:, 3] != 0]
