@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.error import URLError
@@ -8,6 +9,9 @@ import numpy as np
 from kneed import KneeLocator
 from PIL import Image
 from sklearn.cluster import MiniBatchKMeans
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class ImageConverter:
@@ -63,7 +67,7 @@ class ImageConverter:
             matplotlib.colors.ListedColormap: A matplotlib ListedColormap object.
         """
         # create a kmeans model
-        self.kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=random_state)
+        self.kmeans = MiniBatchKMeans(batch_size=512, n_clusters=n_colors, random_state=random_state)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
         # get the cluster centers
@@ -105,6 +109,7 @@ class ImageConverter:
         ssd = dict()
         cmaps = dict()
         for n_colors in range(2, max_colors + 1):
+            logger.info(f"Generating {n_colors} colors")
             cmap = self.generate_cmap(n_colors=n_colors, palette_name=palette_name, random_state=random_state)
             cmaps[n_colors] = cmap
             ssd[n_colors] = self.kmeans.inertia_
