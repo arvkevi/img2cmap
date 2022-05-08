@@ -1,4 +1,5 @@
 import logging
+import os
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.error import URLError
@@ -6,6 +7,7 @@ from urllib.request import urlopen
 
 import matplotlib as mpl
 import numpy as np
+import psutil
 from kneed import KneeLocator
 from PIL import Image
 from sklearn.cluster import MiniBatchKMeans
@@ -66,10 +68,12 @@ class ImageConverter:
         Returns:
             matplotlib.colors.ListedColormap: A matplotlib ListedColormap object.
         """
+        logger.info(f"Generating {n_colors} colors")
         # create a kmeans model
         self.kmeans = MiniBatchKMeans(batch_size=512, n_clusters=n_colors, random_state=random_state)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
+        logger.info(f"Finished kmeans for {n_colors} {psutil.Process(os.getpid()).memory_info().rss / 1024**2}MB")
         # get the cluster centers
         centroids = self.kmeans.cluster_centers_ / 255
         # return the palette
@@ -109,11 +113,13 @@ class ImageConverter:
         ssd = dict()
         cmaps = dict()
         for n_colors in range(2, max_colors + 1):
-            logger.info(f"Generating {n_colors} colors")
             cmap = self.generate_cmap(n_colors=n_colors, palette_name=palette_name, random_state=random_state)
             cmaps[n_colors] = cmap
             ssd[n_colors] = self.kmeans.inertia_
+            logger.info(f"Finished cmap for {n_colors} {psutil.Process(os.getpid()).memory_info().rss / 1024**2}MB")
 
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
+
+        logger.info("Finished cmaps")
 
         return cmaps, best_n_colors, ssd
