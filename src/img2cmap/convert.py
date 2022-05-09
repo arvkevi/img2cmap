@@ -21,10 +21,10 @@ class ImageConverter:
     Args:
         image_path str: The path to the image. Can be a local file or a URL.
         resize (tuple or bool, optional): If a tuple, the max size (w x h)
-         to resize the image to. If True, resizes the image to a max (256, 256).
+         to resize the image to. If True, resizes the image to a max (512, 512).
          If False, uses the original image size.
         Uses https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.thumbnail to resize the image.
-        Preserves theh aspect ratio. Defaults to True.
+        Preserves theh aspect ratio. Defaults to False.
         remove_transparent bool: If True, will not consider any transparent pixels.
         Defaults to False.
 
@@ -35,7 +35,7 @@ class ImageConverter:
         kmeans (sklearn.cluster.MiniBatchKMeans): A kmeans model.
     """
 
-    def __init__(self, image_path, resize=True, remove_transparent=False):
+    def __init__(self, image_path, resize=False, remove_transparent=False):
         self.image_path = image_path
         # try to open the image
         try:
@@ -49,7 +49,7 @@ class ImageConverter:
         # convert the image to a numpy array
         self.image = self.image.convert("RGBA")
         if resize is True:
-            self.image.thumbnail((256, 256), Image.LANCZOS)
+            self.image.thumbnail((512, 512), Image.LANCZOS)
         elif resize is not False:
             self.image.thumbnail(resize, Image.LANCZOS)
         self.pixels = np.array(self.image.getdata())
@@ -75,7 +75,7 @@ class ImageConverter:
         """
         logger.info(f"Generating {n_colors} colors")
         # create a kmeans model
-        self.kmeans = MiniBatchKMeans(batch_size=56, n_clusters=n_colors, init="k-means++", random_state=random_state)
+        self.kmeans = MiniBatchKMeans(n_clusters=n_colors, init="k-means++", random_state=random_state)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
         logger.info(f"Finished kmeans for {n_colors}")
