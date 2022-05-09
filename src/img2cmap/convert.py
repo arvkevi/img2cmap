@@ -63,12 +63,12 @@ class ImageConverter:
         Returns:
             matplotlib.colors.ListedColormap: A matplotlib ListedColormap object.
         """
-        logger.debug(f"Generating {n_colors} colors")
+        logger.info(f"Generating {n_colors} colors")
         # create a kmeans model
         self.kmeans = MiniBatchKMeans(batch_size=512, n_clusters=n_colors, random_state=random_state)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
-        logger.debug(f"Finished kmeans for {n_colors}")
+        logger.info(f"Finished kmeans for {n_colors}")
         # get the cluster centers
         centroids = self.kmeans.cluster_centers_ / 255
         # return the palette
@@ -111,10 +111,10 @@ class ImageConverter:
             cmap = self.generate_cmap(n_colors=n_colors, palette_name=palette_name, random_state=random_state)
             cmaps[n_colors] = cmap
             ssd[n_colors] = self.kmeans.inertia_
-            logger.debug(f"Finished cmap for {n_colors}")
+            logger.info(f"Finished cmap for {n_colors}")
 
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
 
-        logger.debug("Finished cmaps")
+        logger.info("Finished cmaps")
 
         return cmaps, best_n_colors, ssd
