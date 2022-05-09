@@ -65,7 +65,7 @@ class ImageConverter:
         """
         logger.info(f"Generating {n_colors} colors")
         # create a kmeans model
-        self.kmeans = MiniBatchKMeans(batch_size=512, n_clusters=n_colors, random_state=random_state)
+        self.kmeans = MiniBatchKMeans(batch_size=56, n_clusters=n_colors, random_state=random_state)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
         logger.info(f"Finished kmeans for {n_colors}")

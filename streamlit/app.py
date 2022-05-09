@@ -58,7 +58,7 @@ def main():
     random_state = st.sidebar.number_input("Random state", value=42, help="Random state for reproducibility")
     random_state = int(random_state)
 
-    # @st.cache(allow_output_mutation=True)
+    @st.cache(allow_output_mutation=True)
     def get_image_converter(user_image, remove_transparent):
         converter = ImageConverter(user_image, remove_transparent=remove_transparent)
         return converter
