@@ -7,7 +7,6 @@ from urllib.request import urlopen
 
 import matplotlib as mpl
 import numpy as np
-import psutil
 from kneed import KneeLocator
 from PIL import Image
 from sklearn.cluster import MiniBatchKMeans
@@ -22,7 +21,6 @@ class ImageConverter:
     Args:
         image_path str: The path to the image. Can be a local file or a URL.
         remove_transparent bool: If True, will not consider any transparent pixels. Defaults to False.
-        downsample bool: If True, will downsample the image to 512x512. Defaults to True.
 
     Attributes:
         image_path (str): The path to the image. Can be a local file or a URL.
@@ -31,7 +29,7 @@ class ImageConverter:
         kmeans (sklearn.cluster.MiniBatchKMeans): A kmeans model.
     """
 
-    def __init__(self, image_path, remove_transparent=False, downsample=True):
+    def __init__(self, image_path, remove_transparent=False):
         self.image_path = image_path
         # try to open the image
         try:
@@ -42,9 +40,6 @@ class ImageConverter:
             except (URLError, HTTPError, FileNotFoundError) as error:
                 raise URLError(f"Could not open {self.image_path} {error}") from error
 
-        # downsample the image with antialiasing, inplace
-        if downsample:
-            self.image.thumbnail((512, 512), Image.LANCZOS)
         # convert the image to a numpy array
         self.image = self.image.convert("RGBA")
         self.pixels = np.array(self.image.getdata())
@@ -68,12 +63,12 @@ class ImageConverter:
         Returns:
             matplotlib.colors.ListedColormap: A matplotlib ListedColormap object.
         """
-        logger.info(f"Generating {n_colors} colors")
+        logger.debug(f"Generating {n_colors} colors")
         # create a kmeans model
         self.kmeans = MiniBatchKMeans(batch_size=512, n_clusters=n_colors, random_state=random_state)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
-        logger.info(f"Finished kmeans for {n_colors} {psutil.Process(os.getpid()).memory_info().rss / 1024**2}MB")
+        logger.debug(f"Finished kmeans for {n_colors}")
         # get the cluster centers
         centroids = self.kmeans.cluster_centers_ / 255
         # return the palette
@@ -116,10 +111,10 @@ class ImageConverter:
             cmap = self.generate_cmap(n_colors=n_colors, palette_name=palette_name, random_state=random_state)
             cmaps[n_colors] = cmap
             ssd[n_colors] = self.kmeans.inertia_
-            logger.info(f"Finished cmap for {n_colors} {psutil.Process(os.getpid()).memory_info().rss / 1024**2}MB")
+            logger.debug(f"Finished cmap for {n_colors}")
 
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
 
-        logger.info("Finished cmaps")
+        logger.debug("Finished cmaps")
 
         return cmaps, best_n_colors, ssd
