@@ -58,7 +58,7 @@ class ImageConverter:
         self.pixels = self.pixels[:, :3]
         self.kmeans = None
 
-    def generate_cmap(self, n_colors=4, sort_by_hue=False, palette_name=None, random_state=None):
+    def generate_cmap(self, n_colors=4, palette_name=None, random_state=None):
         """Generates a matplotlib ListedColormap from an image.
 
         Args:
@@ -91,9 +91,9 @@ class ImageConverter:
         # Handle 4 dimension RGBA colors
         cmap.colors = cmap.colors[:, :3]
 
-        if sort_by_hue:
-            cmap.colors = sorted(cmap.colors, key=lambda rgb: colorsys.rgb_to_hsv(*rgb))
-        return cmap
+        # Sort colors by hue
+        cmap.colors = sorted(cmap.colors, key=lambda rgb: colorsys.rgb_to_hsv(*rgb))
+        
 
     def generate_optimal_cmap(self, max_colors=10, palette_name=None, random_state=None):
         """Generates an optimal matplotlib ListedColormap from an image by finding the optimal number of clusters using the elbow method.
@@ -126,7 +126,7 @@ class ImageConverter:
             cmaps[n_colors] = cmap
             ssd[n_colors] = self.kmeans.inertia_
             logger.info(f"Finished cmap for {n_colors}")
-            logger.info(n_colors.shape)
+            logger.info(n_colors)
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
 
         logger.info("Finished cmaps")
