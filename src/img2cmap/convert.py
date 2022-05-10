@@ -94,8 +94,8 @@ class ImageConverter:
         # Sort colors by hue
         cmap.colors = sorted(cmap.colors, key=lambda rgb: colorsys.rgb_to_hsv(*rgb))
 
-        # Handle cases where all rgb values evaluate to 1. Temporary bug fix
-        cmap.colors = [i if max(i)==1 and min(i)==1 else [j-.0000001 for j in i] for i in cmap.colors]
+        # Handle cases where all rgb values evaluate to 1. This is a temporary fix
+        # cmap.colors = np.array([i if max(i)==1 and min(i)==1 else [j-10e-10 for j in i] for i in cmap.colors])
         return cmap
 
 

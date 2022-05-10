@@ -1,5 +1,4 @@
-import colorsys
-import math
+
 import warnings
 from io import BytesIO
 
