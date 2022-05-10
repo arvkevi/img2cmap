@@ -1,3 +1,5 @@
+import colorsys
+import math
 import warnings
 from io import BytesIO
 
@@ -10,6 +12,34 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import streamlit as st
 from img2cmap import ImageConverter
 
+def step (r,g,b, repetitions=1):
+    """_summary_
+
+    Parameters
+    ----------
+    r : str
+        red value
+    g : str
+        green value
+    b : str
+        blue value
+    repetitions : int, optional
+        number of repetitions, by default 1
+
+    Returns
+    -------
+    tuple
+        the thing to sort colors on
+    """
+    lum = math.sqrt( .241 * r + .691 * g + .068 * b )
+    h, s, v = colorsys.rgb_to_hsv(r,g,b)
+    h2 = int(h * repetitions)
+    lum2 = int(lum * repetitions)
+    v2 = int(v * repetitions)
+    if h2 % 2 == 1:
+        v2 = repetitions - v2
+        lum = repetitions - lum
+    return (h2, lum, v2)
 
 # @profile
 def main():
@@ -57,6 +87,8 @@ def main():
     )
     random_state = st.sidebar.number_input("Random state", value=42, help="Random state for reproducibility")
     random_state = int(random_state)
+    sort_by_hue = st.sidebar.checkbox("Hue", help="If checked, sort colors by hue")
+
 
     @st.cache(allow_output_mutation=True)
     def get_image_converter(user_image, remove_transparent):
@@ -66,7 +98,7 @@ def main():
     converter = get_image_converter(user_image, remove_transparent)
 
     with st.spinner("Generating colormap..."):
-        cmap = converter.generate_cmap(n_colors=n_colors, palette_name="", random_state=random_state)
+        cmap = converter.generate_cmap(n_colors=n_colors, sort_by_hue = sort_by_hue, palette_name="", random_state=random_state)
 
     # plot the image and colorbar
     fig1, ax1 = plt.subplots(figsize=(8, 8))
@@ -106,6 +138,7 @@ def main():
 
             # i will be y axis
             for y, cmap_ in cmaps.items():
+            
                 colors = sorted([mpl.colors.rgb2hex(c) for c in cmap_.colors])
                 intervals, width = np.linspace(0, xmax, len(colors) + 1, retstep=True)
                 # j will be x axis

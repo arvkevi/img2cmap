@@ -1,5 +1,5 @@
+import colorsys
 import logging
-import os
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.error import URLError
@@ -58,11 +58,12 @@ class ImageConverter:
         self.pixels = self.pixels[:, :3]
         self.kmeans = None
 
-    def generate_cmap(self, n_colors=4, palette_name=None, random_state=None):
+    def generate_cmap(self, n_colors=4, sort_by_hue=False, palette_name=None, random_state=None):
         """Generates a matplotlib ListedColormap from an image.
 
         Args:
             n_colors (int, optional): The number of colors in the ListedColormap. Defaults to 4.
+            sort_by_hue (bool, optional): If True, will sort the colors by hue. Defaults to False.
             palette_name (str, optional): A name for your created palette. If None, defaults to the image name.
                 Defaults to None.
             random_state (int, optional): A random seed for reproducing ListedColormaps.
@@ -89,6 +90,9 @@ class ImageConverter:
 
         # Handle 4 dimension RGBA colors
         cmap.colors = cmap.colors[:, :3]
+
+        if sort_by_hue:
+            cmap.colors = sorted(cmap.colors, key=lambda rgb: colorsys.rgb_to_hsv(*rgb))
         return cmap
 
     def generate_optimal_cmap(self, max_colors=10, palette_name=None, random_state=None):
@@ -122,7 +126,7 @@ class ImageConverter:
             cmaps[n_colors] = cmap
             ssd[n_colors] = self.kmeans.inertia_
             logger.info(f"Finished cmap for {n_colors}")
-
+            logger.info(n_colors.shape)
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
 
         logger.info("Finished cmaps")
