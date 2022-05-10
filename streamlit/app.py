@@ -12,35 +12,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import streamlit as st
 from img2cmap import ImageConverter
 
-def step (r,g,b, repetitions=1):
-    """_summary_
-
-    Parameters
-    ----------
-    r : str
-        red value
-    g : str
-        green value
-    b : str
-        blue value
-    repetitions : int, optional
-        number of repetitions, by default 1
-
-    Returns
-    -------
-    tuple
-        the thing to sort colors on
-    """
-    lum = math.sqrt( .241 * r + .691 * g + .068 * b )
-    h, s, v = colorsys.rgb_to_hsv(r,g,b)
-    h2 = int(h * repetitions)
-    lum2 = int(lum * repetitions)
-    v2 = int(v * repetitions)
-    if h2 % 2 == 1:
-        v2 = repetitions - v2
-        lum = repetitions - lum
-    return (h2, lum, v2)
-
 # @profile
 def main():
     warnings.filterwarnings("ignore")
