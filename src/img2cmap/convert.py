@@ -1,3 +1,4 @@
+import colorsys
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.error import URLError
@@ -71,6 +72,13 @@ class ImageConverter:
 
         # Handle 4 dimension RGBA colors
         cmap.colors = cmap.colors[:, :3]
+
+        # Sort colors by hue
+        cmap.colors = sorted(cmap.colors, key=lambda rgb: colorsys.rgb_to_hsv(*rgb))
+        # Handle cases where all rgb values evaluate to 1 or 0. This is a temporary fix
+        cmap.colors = np.where(np.isclose(cmap.colors, 1), 1 - 1e-6, cmap.colors)
+        cmap.colors = np.where(np.isclose(cmap.colors, 0), 1e-6, cmap.colors)
+
         return cmap
 
     def generate_optimal_cmap(self, max_colors=10, palette_name=None, random_state=None):
