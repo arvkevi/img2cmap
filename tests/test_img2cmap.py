@@ -53,10 +53,11 @@ def test_cmap_optimal_plot(test_image_input):
     imageconverter = ImageConverter(test_image_input)
     cmaps, _, _ = imageconverter.generate_optimal_cmap(random_state=42)
     for _, cmap_ in cmaps.items():
-        assert not np.any(np.all(np.isclose(cmap_.colors, np.array([1,1,1])), axis=1))
-        assert not np.any(np.all(np.isclose(cmap_.colors, np.array([0,0,0])), axis=1))
+
+        assert not np.any(np.all(np.isclose(cmap_.colors, 1, atol=1e-9)))
+        assert not np.any(np.all(np.isclose(cmap_.colors, 0, atol=1e-9)))
         
-        
+
 # TODO: Mock these!
 # def test_url():
 #     with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
