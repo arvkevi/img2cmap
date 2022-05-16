@@ -106,6 +106,8 @@ def main():
 
             # i will be y axis
             for y, cmap_ in cmaps.items():
+                print(y)
+                print(cmap_.colors)
                 colors = sorted([mpl.colors.rgb2hex(c) for c in cmap_.colors])
                 intervals, width = np.linspace(0, xmax, len(colors) + 1, retstep=True)
                 # j will be x axis
