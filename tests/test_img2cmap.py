@@ -48,15 +48,15 @@ def test_cmap_color_dimension(test_image_input):
     cmap = imageconverter.generate_cmap(4, "Miami Yeaaaa", 42)
     assert cmap.colors.shape[1] == 3
 
-def test_cmap_optimal_plot():
-    
-    imageconverter = ImageConverter(THIS_DIR.joinpath("images/movie_chart.png"))
+@pytest.mark.parametrize("test_image_input", images)
+def test_cmap_optimal_plot(test_image_input):
+    imageconverter = ImageConverter(test_image_input)
     cmaps, _, _ = imageconverter.generate_optimal_cmap(random_state=42)
     for _, cmap_ in cmaps.items():
         assert not np.any(np.all(np.isclose(cmap_.colors, np.array([1,1,1])), axis=1))
         assert not np.any(np.all(np.isclose(cmap_.colors, np.array([0,0,0])), axis=1))
         
-
+        
 # TODO: Mock these!
 # def test_url():
 #     with open(THIS_DIR.joinpath("urls/nba-logos.txt"), "r") as f:
