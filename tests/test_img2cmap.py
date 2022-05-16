@@ -1,6 +1,6 @@
 from pathlib import Path
 
-# import matplotlib as mpl
+import numpy as np
 import pytest
 
 from img2cmap import ImageConverter
@@ -44,6 +44,16 @@ def test_cmap_color_dimension(test_image_input):
     imageconverter = ImageConverter(test_image_input)
     cmap = imageconverter.generate_cmap(4, "Miami Yeaaaa", 42)
     assert cmap.colors.shape[1] == 3
+
+
+@pytest.mark.parametrize("test_image_input", images)
+def test_cmap_optimal_plot(test_image_input):
+    imageconverter = ImageConverter(test_image_input)
+    cmaps, _, _ = imageconverter.generate_optimal_cmap(random_state=42)
+    for _, cmap_ in cmaps.items():
+
+        assert not np.any(np.all(np.isclose(cmap_.colors, 1, atol=1e-9)))
+        assert not np.any(np.all(np.isclose(cmap_.colors, 0, atol=1e-9)))
 
 
 # TODO: Mock these!
