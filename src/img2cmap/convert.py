@@ -115,3 +115,13 @@ class ImageConverter:
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
 
         return cmaps, best_n_colors, ssd
+
+    def resize(self, size=(512, 512)):
+        """Resizes the image to the specified size.
+
+        :param size: The new size of the image.
+        :type size: tuple
+
+        :return: NoReturn
+        """
+        self.image.thumbnail(size, Image.Resampling.LANCZOS)
