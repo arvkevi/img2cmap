@@ -13,6 +13,9 @@ include .readthedocs.yml
 include pytest.ini
 include tox.ini
 recursive-include images *
+include *.toml
+include Dockerfile
+recursive-include streamlit *.py
 
 include AUTHORS.rst
 include CHANGELOG.rst
