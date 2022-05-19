@@ -20,7 +20,7 @@ def read(*names, **kwargs):
 
 setup(
     name="img2cmap",
-    version="0.2.1",
+    version="0.2.2",
     license="MIT",
     description="Create colormaps from images",
     long_description="{}\n{}".format(
