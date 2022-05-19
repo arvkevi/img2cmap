@@ -98,7 +98,6 @@ class ImageConverter:
             remove_background (_type_, optional): _description_. Defaults to None.
 
         Returns:
-
             dict: A dictionary of matplotlib ListedColormap objects.
             Keys are the number of colors (clusters). Values are ListedColormap objects.
             int: The optimal number of colors.
@@ -115,3 +114,20 @@ class ImageConverter:
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
 
         return cmaps, best_n_colors, ssd
+
+    def resize(self, size=(512, 512)):
+        """Resizes the image to the specified size.
+
+        Args:
+            size (tuple): The new size of the image.
+
+        Returns:
+            None
+        """
+        try:
+            resampling_technique = Image.Resampling.LANCZOS
+        # py36
+        except AttributeError:
+            resampling_technique = Image.LANCZOS
+
+        self.image.thumbnail(size, resampling_technique)
