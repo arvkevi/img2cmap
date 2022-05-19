@@ -124,4 +124,10 @@ class ImageConverter:
         Returns:
             None
         """
-        self.image.thumbnail(size, Image.Resampling.LANCZOS)
+        try:
+            resampling_technique = Image.Resampling.LANCZOS
+        # py36
+        except AttributeError:
+            resampling_technique = Image.LANCZOS
+
+        self.image.thumbnail(size, resampling_technique)
