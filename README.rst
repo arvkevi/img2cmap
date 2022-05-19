@@ -37,7 +37,7 @@ Now, use the colormap in your plots!
     :align: center
 
 
-Plot an image and a colorbar side by side.
+Plot the image and a colorbar side by side.
 
 .. code-block:: python3
 
