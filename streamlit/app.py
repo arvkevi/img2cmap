@@ -64,6 +64,7 @@ def main():
         return converter
 
     converter = get_image_converter(user_image, remove_transparent)
+    converter.resize()
 
     with st.spinner("Generating colormap..."):
         cmap = converter.generate_cmap(n_colors=n_colors, palette_name="", random_state=random_state)
@@ -81,6 +82,10 @@ def main():
     cb = fig1.colorbar(im, cax=cax, orientation="vertical", label=cmap.name)
     cb.set_ticks([])
     st.pyplot(fig1)
+
+    st.caption(
+        "The original image has been resized to a smaller size, if you want to see the colormap for the full size image, use the Python package."
+    )
 
     colors1 = [mpl.colors.rgb2hex(c) for c in cmap.colors]
     st.text("Hex Codes (click to copy on far right)")
