@@ -84,7 +84,8 @@ def main():
     st.pyplot(fig1)
 
     st.caption(
-        "The original image has been resized to a smaller size, if you want to see the colormap for the full size image, use the Python package."
+        "The original image has been resized to a smaller size, if you want to see "
+        "the colormap for the full size image, use the Python package."
     )
 
     colors1 = [mpl.colors.rgb2hex(c) for c in cmap.colors]
