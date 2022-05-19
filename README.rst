@@ -21,8 +21,23 @@ Basic
     converter = ImageConverter("tests/images/south_beach_sunset.jpg")
     cmap = converter.generate_cmap(n_colors=5, palette_name="south_beach_sunset", random_state=42)
 
+Now, use the colormap in your plots!
 
-Plot an image and a colorbar side by side.
+.. code-block:: python3
+
+    import matplotlib.pyplot as plt
+
+    colors = cmap.colors
+
+    with plt.style.context("dark_background"):
+        for i, color in enumerate(colors):
+            plt.plot(range(10), [_+i+1 for _ in range(10)], color=color, linewidth=4)
+
+.. image:: images/img2cmap_demo.png
+    :align: center
+
+
+Plot the image and a colorbar side by side.
 
 .. code-block:: python3
 
@@ -44,24 +59,25 @@ Plot an image and a colorbar side by side.
 .. image:: images/colorbar.png
     :align: center
 
-Now, use the colormap in your plots!
-
-.. code-block:: python3
-
-    import matplotlib.pyplot as plt
-
-    colors = cmap.colors
-
-    with plt.style.context("dark_background"):
-        for i, color in enumerate(colors):
-            plt.plot(range(10), [_+i+1 for _ in range(10)], color=color, linewidth=4)
-
-.. image:: images/img2cmap_demo.png
-    :align: center
-
 
 Advanced
 --------
+
+generate_optimal_cmap
+^^^^^^^^^^^^^^^^^^^^^
+
+You can extract the optimal number of colors from the image using the ``generate_optimal_cmap`` method.
+Under the hood this performs the `elbow method <https://en.wikipedia.org/wiki/Elbow_method_(clustering)>`
+to determine the optimal number of clusters based on the sum of the squared distances between each pixel
+and it's cluster center.
+
+
+.. code-block:: python3
+
+    cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(max_colors=10, random_state=42)
+
+    best_cmap = cmaps[best_n_colors]
+
 
 remove_transparency
 ^^^^^^^^^^^^^^^^^^^
@@ -121,20 +137,19 @@ Plot both colormaps with the image:
 Notice, only after removing the transparent pixels, does the classic purple and gold show in the colormap.
 
 
-generate_optimal_cmap
-^^^^^^^^^^^^^^^^^^^^^
+resize
+^^^^^^
 
-You can extract the optimal number of colors from the image using the ``generate_optimal_cmap`` method.
-Under the hood this performs the `elbow method <https://en.wikipedia.org/wiki/Elbow_method_(clustering)>`
-to determine the optimal number of clusters based on the sum of the squared distances between each pixel
-and it's cluster center.
-
+There is a method of the ImageConverter class to resize images. It will preserve the aspect ratio, but reduce the size
+of the image.
 
 .. code-block:: python3
 
-    cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(max_colors=10, random_state=42)
-
-    best_cmap = cmaps[best_n_colors]
+    def test_resize():
+        imageconverter = ImageConverter("tests/images/south_beach_sunset.jpg")
+        imageconverter.resize(size=(512, 512))
+        # preserves aspect ratio
+        assert imageconverter.image.size == (512, 361)
 
 
 Installation
