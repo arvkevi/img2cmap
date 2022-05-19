@@ -98,7 +98,6 @@ class ImageConverter:
             remove_background (_type_, optional): _description_. Defaults to None.
 
         Returns:
-
             dict: A dictionary of matplotlib ListedColormap objects.
             Keys are the number of colors (clusters). Values are ListedColormap objects.
             int: The optimal number of colors.
@@ -119,9 +118,10 @@ class ImageConverter:
     def resize(self, size=(512, 512)):
         """Resizes the image to the specified size.
 
-        :param size: The new size of the image.
-        :type size: tuple
+        Args:
+            size (tuple): The new size of the image.
 
-        :return: NoReturn
+        Returns:
+            None
         """
         self.image.thumbnail(size, Image.Resampling.LANCZOS)
