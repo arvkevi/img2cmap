@@ -29,7 +29,7 @@ class ImageConverter:
         # try to open the image
         try:
             self.image = Image.open(self.image_path)
-        except FileNotFoundError:
+        except (FileNotFoundError, OSError):
             try:
                 self.image = Image.open(urlopen(self.image_path))
             except (URLError, HTTPError, FileNotFoundError) as error:
