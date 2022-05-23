@@ -71,6 +71,7 @@ setup(
         "numpy",
         "pillow",
         "kneed",
+        "requests"
     ],
     extras_require={
         "dev": [
