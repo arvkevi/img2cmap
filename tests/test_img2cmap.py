@@ -1,8 +1,8 @@
 from pathlib import Path
-import requests
 
 import numpy as np
 import pytest
+import requests
 
 from img2cmap import ImageConverter
 
