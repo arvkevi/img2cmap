@@ -7,7 +7,13 @@ from img2cmap import ImageConverter
 
 THIS_DIR = Path(__file__).parent
 
-images = list(THIS_DIR.joinpath("images").iterdir())
+file_images = list(THIS_DIR.joinpath("images").iterdir())
+web_url_images = [
+    "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4N0qxKmiCah2If-5M4Dw7Lb5MPb6w7eNKog&usqp=CAU",
+]
+
+images = file_images + web_url_images
 
 
 @pytest.mark.parametrize("test_image_input", images)
@@ -24,7 +30,7 @@ def test_generate_cmap_2(test_image_input):
     assert cmap.N == 4
 
 
-@pytest.mark.parametrize("test_image_input", images)
+@pytest.mark.parametrize("test_image_input", file_images)
 def test_generate_cmap_3(test_image_input):
     cmap_default_name = test_image_input.stem
     imageconverter = ImageConverter(test_image_input)
