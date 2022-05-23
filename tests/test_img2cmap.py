@@ -92,3 +92,10 @@ def test_generate_optimal():
     imageconverter = ImageConverter(THIS_DIR.joinpath("images/south_beach_sunset.jpg"))
     _, best_n_colors, _ = imageconverter.generate_optimal_cmap(random_state=42)
     assert best_n_colors == 5
+
+
+def test_resize():
+    imageconverter = ImageConverter(THIS_DIR.joinpath("images/south_beach_sunset.jpg"))
+    imageconverter.resize(size=(512, 512))
+    # thumbnail preserves the aspect ratio
+    assert imageconverter.image.size == (512, 361)
