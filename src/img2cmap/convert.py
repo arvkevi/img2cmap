@@ -32,8 +32,10 @@ class ImageConverter:
         except (FileNotFoundError, OSError):
             try:
                 self.image = Image.open(urlopen(self.image_path))
-            except (URLError, HTTPError, FileNotFoundError) as error:
+            except (URLError, HTTPError) as error:
                 raise URLError(f"Could not open {self.image_path} {error}") from error
+            except ValueError as error:
+                raise ValueError(f"Could not open {self.image_path} {error}") from error
 
         # convert the image to a numpy array
         self.image = self.image.convert("RGBA")
