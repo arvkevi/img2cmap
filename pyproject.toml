@@ -6,10 +6,15 @@ requires = [
     "scikit-learn",
     "numpy",
     "pillow",
-    "kneed",
-    "requests"
+    "kneed"
 ]
-
+[project.optional-dependencies]
+dev = [
+    "black",
+    "pytest",
+    "pytest-cov",
+    "requests",
+]
 [tool.black]
 line-length = 140
 target-version = ['py36']
