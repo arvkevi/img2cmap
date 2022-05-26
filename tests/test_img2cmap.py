@@ -2,12 +2,28 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import requests
 
 from img2cmap import ImageConverter
 
 THIS_DIR = Path(__file__).parent
 
-images = list(THIS_DIR.joinpath("images").iterdir())
+test_image_files = list(THIS_DIR.joinpath("images").iterdir())
+image_urls = [
+    "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4N0qxKmiCah2If-5M4Dw7Lb5MPb6w7eNKog&usqp=CAU",
+]
+
+# Make sure web urls are valid
+test_image_urls = []
+for url in image_urls:
+    response = requests.get(url)
+    if response.status_code == 200:
+        test_image_urls.append(url)
+    else:
+        print(f"Could not get image from {url}")
+
+images = test_image_files + test_image_urls
 
 
 @pytest.mark.parametrize("test_image_input", images)
@@ -24,7 +40,7 @@ def test_generate_cmap_2(test_image_input):
     assert cmap.N == 4
 
 
-@pytest.mark.parametrize("test_image_input", images)
+@pytest.mark.parametrize("test_image_input", test_image_files)
 def test_generate_cmap_3(test_image_input):
     cmap_default_name = test_image_input.stem
     imageconverter = ImageConverter(test_image_input)
@@ -37,6 +53,13 @@ def test_generate_cmap_4(test_image_input):
     with pytest.raises(ValueError):
         imageconverter = ImageConverter(test_image_input)
         imageconverter.generate_cmap(-100, "miami", 42)
+
+
+@pytest.mark.parametrize("test_image_input", images)
+def test_generate_cmap_5(test_image_input):
+    imageconverter = ImageConverter(test_image_input, remove_transparent=True)
+    cmap = imageconverter.generate_cmap(4, "miami", 42)
+    assert cmap.N == 4
 
 
 @pytest.mark.parametrize("test_image_input", images)

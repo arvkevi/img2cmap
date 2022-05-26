@@ -6,7 +6,7 @@ requires = [
     "scikit-learn",
     "numpy",
     "pillow",
-    "kneed",
+    "kneed"
 ]
 
 [tool.black]
