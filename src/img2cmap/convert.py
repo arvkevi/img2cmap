@@ -16,7 +16,6 @@ class ImageConverter:
 
     Args:
         image_path str: The path to the image. Can be a local file or a URL.
-        remove_transparent bool: If True, will not consider any transparent pixels. Defaults to False.
 
     Attributes:
         image_path (str): The path to the image. Can be a local file or a URL.
