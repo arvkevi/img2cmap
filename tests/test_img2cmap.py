@@ -56,13 +56,6 @@ def test_generate_cmap_4(test_image_input):
 
 
 @pytest.mark.parametrize("test_image_input", images)
-def test_generate_cmap_5(test_image_input):
-    imageconverter = ImageConverter(test_image_input, remove_transparent=True)
-    cmap = imageconverter.generate_cmap(4, "miami", 42)
-    assert cmap.N == 4
-
-
-@pytest.mark.parametrize("test_image_input", images)
 def test_cmap_color_dimension(test_image_input):
     imageconverter = ImageConverter(test_image_input)
     cmap = imageconverter.generate_cmap(4, "Miami Yeaaaa", 42)
@@ -116,3 +109,11 @@ def test_resize():
     imageconverter.resize(size=(512, 512))
     # thumbnail preserves the aspect ratio
     assert imageconverter.image.size == (512, 361)
+
+
+@pytest.mark.parametrize("test_image_input", images)
+def test_remove_transparency(test_image_input):
+    imageconverter = ImageConverter(test_image_input)
+    imageconverter.remove_transparent()
+    cmap = imageconverter.generate_cmap(4, "miami", 42)
+    assert cmap.N == 4

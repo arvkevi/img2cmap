@@ -60,7 +60,9 @@ def main():
 
     @st.cache(allow_output_mutation=True)
     def get_image_converter(user_image, remove_transparent):
-        converter = ImageConverter(user_image, remove_transparent=remove_transparent)
+        converter = ImageConverter(user_image)
+        if remove_transparent:
+            converter.remove_transparent()
         return converter
 
     converter = get_image_converter(user_image, remove_transparent)
