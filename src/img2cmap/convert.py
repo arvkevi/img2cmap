@@ -135,7 +135,7 @@ class ImageConverter:
         self.image.thumbnail(size, resampling_technique)
 
     def remove_transparent(self):
-        """Removes the transparency from the pixels in an image.
+        """Removes the transparent pixels from an image array
 
         Returns:
             None
