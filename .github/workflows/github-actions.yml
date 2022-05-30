@@ -164,4 +164,3 @@ jobs:
           fail_ci_if_error: true
           files: ./coverage.xml
           flags: unittests
-          path_to_write_report: ./coverage/codecov_report.txt
