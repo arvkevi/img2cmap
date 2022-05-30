@@ -129,3 +129,14 @@ jobs:
         TOXPYTHON: '${{ matrix.toxpython }}'
       run: >
         tox -e ${{ matrix.tox_env }} -v
+    - name: Test with pytest
+      env:
+        TOXPYTHON: '${{ matrix.toxpython }}'
+      run: |
+        pytest --cov=img2cmap --cov-report=xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.5.0
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        
