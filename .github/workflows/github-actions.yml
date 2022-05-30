@@ -19,11 +19,6 @@ jobs:
             toxpython: 'python3.9'
             tox_env: 'docs'
             os: 'ubuntu-latest'
-          - name: 'codecov'
-            python: '3.10'
-            toxpython: 'python3.10'
-            tox_env: 'codecov'
-            os: 'ubuntu-latest'
           - name: 'py36 (ubuntu)'
             python: '3.6'
             toxpython: 'python3.6'
@@ -151,6 +146,7 @@ jobs:
       - name: install dependencies
         run: |
           python -m pip install --progress-bar=off -r ci/requirements.txt
+          python -m pip install .
           virtualenv --version
           pip --version
           tox --version
