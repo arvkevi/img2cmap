@@ -137,5 +137,9 @@ def test_compute_optimal_hexcodes():
 def test_break_kneed():
     imageconverter = ImageConverter(image_urls[0])
     # Case where kneed will not return an optimal value
-    imageconverter.generate_optimal_cmap(max_colors=5, random_state=42)
-    assert imageconverter.hexcodes is None
+    try:
+        imageconverter.generate_optimal_cmap(max_colors=5, random_state=42)
+    except UserWarning:
+        pass
+    except Exception:
+        raise Exception("Unexpected exception")

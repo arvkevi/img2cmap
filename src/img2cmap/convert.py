@@ -120,7 +120,7 @@ class ImageConverter:
             self.hexcodes = [mpl.colors.rgb2hex(c) for c in cmaps[best_n_colors].colors]
         except KeyError:
             # Kneed did not find an optimal point so we don't record any hex values
-            pass
+            self.hexcodes = None
         return cmaps, best_n_colors, ssd
 
     def resize(self, size=(512, 512)):
