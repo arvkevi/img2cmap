@@ -119,7 +119,7 @@ jobs:
         architecture: ${{ matrix.python_arch }}
     - name: install dependencies
       run: |
-        python -mpip install --progress-bar=off -r ci/requirements.txt
+        python -m pip install --progress-bar=off -r ci/requirements.txt
         virtualenv --version
         pip --version
         tox --version
@@ -129,14 +129,11 @@ jobs:
         TOXPYTHON: '${{ matrix.toxpython }}'
       run: >
         tox -e ${{ matrix.tox_env }} -v
-    - name: Test with pytest
-      env:
-        TOXPYTHON: '${{ matrix.toxpython }}'
-      run: |
-        pytest --cov=img2cmap --cov-report=xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
-        file: ./coverage.xml
+        directory: ./coverage/reports/
+        fail_ci_if_error: true
+        files: ./coverage.xml
         flags: unittests
-        
+        path_to_write_report: ./coverage/codecov_report.txt
