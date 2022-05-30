@@ -16,7 +16,6 @@ class ImageConverter:
 
     Args:
         image_path str: The path to the image. Can be a local file or a URL.
-        remove_transparent bool: If True, will not consider any transparent pixels. Defaults to False.
 
     Attributes:
         image_path (str): The path to the image. Can be a local file or a URL.
@@ -24,7 +23,7 @@ class ImageConverter:
         pixels (numpy.ndarray): A numpy array of RGB values.
     """
 
-    def __init__(self, image_path, remove_transparent=False):
+    def __init__(self, image_path):
         self.image_path = image_path
         # try to open the image
         try:
@@ -40,8 +39,9 @@ class ImageConverter:
         # convert the image to a numpy array
         self.image = self.image.convert("RGBA")
         self.pixels = np.array(self.image.getdata())
-        if remove_transparent:
-            self.pixels = self.pixels[self.pixels[:, 3] != 0]
+
+        # Find transparent pixels and store them in case we want to remove transparency
+        self.transparent_pixels = self.pixels[:, 3] == 0
         self.pixels = self.pixels[:, :3]
         self.kmeans = None
 
@@ -133,3 +133,11 @@ class ImageConverter:
             resampling_technique = Image.LANCZOS
 
         self.image.thumbnail(size, resampling_technique)
+
+    def remove_transparent(self):
+        """Removes the transparent pixels from an image array
+
+        Returns:
+            None
+        """
+        self.pixels = self.pixels[~self.transparent_pixels]
