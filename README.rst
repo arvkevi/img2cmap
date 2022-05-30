@@ -110,9 +110,9 @@ Make two ImageConverter objects:
 
 Compute hexcodes: 
 
-img2cmap computes the RGB values of an image and stores it in the `self.pixels` array. 
-For cases where the hexcodes are needed, running the `compute_hexcodes` method will compute the hexcodes
-and store them as an attribute (`self.hexcodes`).
+img2cmap computes the RGB values of an image and stores it in the ``self.pixels`` array. 
+For cases where the hexcodes are needed, running the ``compute_hexcodes`` method will compute the hexcodes
+and store them as an attribute (``self.hexcodes``).
 
 .. code-block:: python3
 
