@@ -44,6 +44,7 @@ class ImageConverter:
         self.transparent_pixels = self.pixels[:, 3] == 0
         self.pixels = self.pixels[:, :3]
         self.kmeans = None
+        self.hexcodes = None
 
     def generate_cmap(self, n_colors=4, palette_name=None, random_state=None):
         """Generates a matplotlib ListedColormap from an image.
@@ -81,6 +82,7 @@ class ImageConverter:
         cmap.colors = np.where(np.isclose(cmap.colors, 1), 1 - 1e-6, cmap.colors)
         cmap.colors = np.where(np.isclose(cmap.colors, 0), 1e-6, cmap.colors)
 
+        self.hexcodes = [mpl.colors.rgb2hex(c) for c in cmap.colors]
         return cmap
 
     def generate_optimal_cmap(self, max_colors=10, palette_name=None, random_state=None):
@@ -114,7 +116,11 @@ class ImageConverter:
             ssd[n_colors] = self.kmeans.inertia_
 
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
-
+        try:
+            self.hexcodes = [mpl.colors.rgb2hex(c) for c in cmaps[best_n_colors].colors]
+        except KeyError:
+            # Kneed did not find an optimal point so we don't record any hex values
+            pass
         return cmaps, best_n_colors, ssd
 
     def resize(self, size=(512, 512)):
@@ -141,15 +147,3 @@ class ImageConverter:
             None
         """
         self.pixels = self.pixels[~self.transparent_pixels]
-
-    def compute_hexcodes(self):
-        """Computes the hexcode values from the rgb values of an image array and stores them as an attribute.
-
-        Returns:
-            None
-        """
-
-        def rgb_to_hex(r, g, b):
-            return ("#{:X}{:X}{:X}").format(r, g, b)
-
-        self.hexcodes = [rgb_to_hex(r, g, b) for r, g, b in self.pixels]

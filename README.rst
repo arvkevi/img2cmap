@@ -110,9 +110,8 @@ Make two ImageConverter objects:
 
 Compute hexcodes: 
 
-img2cmap computes the RGB values of an image and stores it in the ``self.pixels`` array. 
-For cases where the hexcodes are needed, running the ``compute_hexcodes`` method will compute the hexcodes
-and store them as an attribute (``self.hexcodes``).
+When running the ``generate_cmap`` or the ``generate_optimal_cmap`` methods the ImageConverter object will automatically 
+capture the resulting hexcodes from the colormap and store them as an attribute.
 
 .. code-block:: python3
 
@@ -121,8 +120,8 @@ and store them as an attribute (``self.hexcodes``).
     image_url = "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg"
 
     converter = ImageConverter(image_url)
-    converter.compute_hexcodes()
-    print(converter.hexcodes[:20])
+    converter.generate_cmap(n_colors=4, palette_name="with_transparent", random_state=42)
+    print(converter.hexcodes)
 
 Plot both colormaps with the image:
 
