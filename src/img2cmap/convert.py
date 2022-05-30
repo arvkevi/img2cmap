@@ -135,9 +135,21 @@ class ImageConverter:
         self.image.thumbnail(size, resampling_technique)
 
     def remove_transparent(self):
-        """Removes the transparent pixels from an image array
+        """Removes the transparent pixels from an image array.
 
         Returns:
             None
         """
         self.pixels = self.pixels[~self.transparent_pixels]
+
+    def compute_hexcodes(self):
+        """Computes the hexcode values from the rgb values of an image array and stores them as an attribute.
+
+        Returns:
+            None
+        """
+
+        def rgb_to_hex(r, g, b):
+            return ("#{:X}{:X}{:X}").format(r, g, b)
+
+        self.hexcodes = [rgb_to_hex(r, g, b) for r, g, b in self.pixels]

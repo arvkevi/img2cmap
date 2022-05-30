@@ -108,6 +108,22 @@ Make two ImageConverter objects:
         n_colors=3, palette_name="no_transparent", random_state=42
     )
 
+Compute hexcodes: 
+
+img2cmap computes the RGB values of an image and stores it in the `self.pixels` array. 
+For cases where the hexcodes are needed, running the `compute_hexcodes` method will compute the hexcodes
+and store them as an attribute (`self.hexcodes`).
+
+.. code-block:: python3
+
+    from img2cmap import ImageConverter
+
+    image_url = "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg"
+
+    converter = ImageConverter(image_url)
+    converter.compute_hexcodes()
+    print(converter.hexcodes[:20])
+
 Plot both colormaps with the image:
 
 

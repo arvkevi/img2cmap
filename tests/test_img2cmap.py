@@ -117,3 +117,11 @@ def test_remove_transparency(test_image_input):
     imageconverter.remove_transparent()
     cmap = imageconverter.generate_cmap(4, "miami", 42)
     assert cmap.N == 4
+
+
+@pytest.mark.parametrize("test_image_input", images)
+def test_compute_hexcodes(test_image_input):
+    imageconverter = ImageConverter(test_image_input)
+    imageconverter.compute_hexcodes()
+    assert imageconverter.hexcodes is not None
+    assert len(imageconverter.hexcodes) == len(imageconverter.pixels)
