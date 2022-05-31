@@ -44,6 +44,7 @@ class ImageConverter:
         self.transparent_pixels = self.pixels[:, 3] == 0
         self.pixels = self.pixels[:, :3]
         self.kmeans = None
+        self.hexcodes = None
 
     def generate_cmap(self, n_colors=4, palette_name=None, random_state=None):
         """Generates a matplotlib ListedColormap from an image.
@@ -81,6 +82,7 @@ class ImageConverter:
         cmap.colors = np.where(np.isclose(cmap.colors, 1), 1 - 1e-6, cmap.colors)
         cmap.colors = np.where(np.isclose(cmap.colors, 0), 1e-6, cmap.colors)
 
+        self.hexcodes = [mpl.colors.rgb2hex(c) for c in cmap.colors]
         return cmap
 
     def generate_optimal_cmap(self, max_colors=10, palette_name=None, random_state=None):
@@ -114,7 +116,11 @@ class ImageConverter:
             ssd[n_colors] = self.kmeans.inertia_
 
         best_n_colors = KneeLocator(list(ssd.keys()), list(ssd.values()), curve="convex", direction="decreasing").knee
-
+        try:
+            self.hexcodes = [mpl.colors.rgb2hex(c) for c in cmaps[best_n_colors].colors]
+        except KeyError:
+            # Kneed did not find an optimal point so we don't record any hex values
+            self.hexcodes = None
         return cmaps, best_n_colors, ssd
 
     def resize(self, size=(512, 512)):
@@ -135,7 +141,7 @@ class ImageConverter:
         self.image.thumbnail(size, resampling_technique)
 
     def remove_transparent(self):
-        """Removes the transparent pixels from an image array
+        """Removes the transparent pixels from an image array.
 
         Returns:
             None

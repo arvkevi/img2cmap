@@ -108,8 +108,8 @@ Make two ImageConverter objects:
         n_colors=3, palette_name="no_transparent", random_state=42
     )
 
-Plot both colormaps with the image:
 
+Plot both colormaps with the image:
 
 .. code-block:: python3
 
@@ -153,6 +153,29 @@ of the image.
         # preserves aspect ratio
         assert imageconverter.image.size == (512, 361)
 
+
+hexcodes
+^^^^^^^^
+
+When running the ``generate_cmap`` or the ``generate_optimal_cmap`` methods the ImageConverter object will automatically 
+capture the resulting hexcodes from the colormap and store them as an attribute.
+
+.. code-block:: python3
+
+    from img2cmap import ImageConverter
+
+    image_url = "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg"
+
+    converter = ImageConverter(image_url)
+    converter.generate_cmap(n_colors=4, palette_name="with_transparent", random_state=42)
+    print(converter.hexcodes)
+
+
+Output:
+
+::
+
+    ['#ba7469', '#dfd67d', '#5d536a', '#321e28']
 
 Installation
 ============

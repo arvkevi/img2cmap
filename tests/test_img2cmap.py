@@ -117,3 +117,24 @@ def test_remove_transparency(test_image_input):
     imageconverter.remove_transparent()
     cmap = imageconverter.generate_cmap(4, "miami", 42)
     assert cmap.N == 4
+
+
+@pytest.mark.parametrize("test_image_input", images)
+def test_compute_hexcodes(test_image_input):
+    imageconverter = ImageConverter(test_image_input)
+    imageconverter.generate_cmap(4, "miami", 42)
+
+    assert imageconverter.hexcodes is not None
+    assert len(imageconverter.hexcodes) == 4
+
+
+def test_compute_optimal_hexcodes():
+    imageconverter = ImageConverter(image_urls[0])
+    imageconverter.generate_optimal_cmap(max_colors=8, random_state=42)
+    assert imageconverter.hexcodes is not None
+
+
+def test_break_kneed():
+    with pytest.raises(UserWarning):
+        imageconverter = ImageConverter(image_urls[0])
+        imageconverter.generate_optimal_cmap(max_colors=5, random_state=42)
