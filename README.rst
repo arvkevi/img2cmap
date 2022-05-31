@@ -170,6 +170,10 @@ capture the resulting hexcodes from the colormap and store them as an attribute.
     converter.generate_cmap(n_colors=4, palette_name="with_transparent", random_state=42)
     print(converter.hexcodes)
 
+
+Output: 
+    ['#ba7469', '#dfd67d', '#5d536a', '#321e28']
+
 Installation
 ============
 
