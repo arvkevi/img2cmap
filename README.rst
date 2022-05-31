@@ -171,7 +171,8 @@ capture the resulting hexcodes from the colormap and store them as an attribute.
     print(converter.hexcodes)
 
 
-Output: 
+Output:
+
 ['#ba7469', '#dfd67d', '#5d536a', '#321e28']
 
 Installation
