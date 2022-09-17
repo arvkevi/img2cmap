@@ -248,6 +248,12 @@ Status
 Development
 ===========
 
+Install the development requirements:
+
+::
+
+    pip install img2cmap[dev]
+
 To run all the tests run::
 
     tox

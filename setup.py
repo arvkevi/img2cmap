@@ -74,5 +74,7 @@ setup(
     ],
     extras_require={
         "dev": ["black", "requests", "tox"],
+        "streamlit": ["streamlit", "st-annotated-text"],
+        "all": ["black", "requests", "tox", "streamlit", "st-annotated-text"],
     },
 )
