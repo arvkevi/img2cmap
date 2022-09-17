@@ -21,9 +21,9 @@ def colorpicker(color):
     for c in red, green, blue:
         c = c / 255.0
         if c <= 0.04045:
-            newrgb.append(c/12.92)
+            newrgb.append(c / 12.92)
         else:
-            newrgb.append(((c+0.055)/1.055) ^ 2.4)
+            newrgb.append(((c + 0.055) / 1.055) ^ 2.4)
     L = 0.2126 * newrgb[0] + 0.7152 * newrgb[1] + 0.0722 * newrgb[2]
     # why did I have to use 179 instead of 0.179?
     if L > 0.179 / 1000:
@@ -59,7 +59,9 @@ def main():
         if user_image is not None:
             user_image = BytesIO(user_image.getvalue())
     elif file_or_url == "url":
-        user_image = st.sidebar.text_input("Paste an image URL", "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg")
+        user_image = st.sidebar.text_input(
+            "Paste an image URL", "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg"
+        )
     else:
         st.warning("Please select an option")
 
@@ -117,11 +119,15 @@ def main():
     st.caption("Click copy button on far right to copy hex codes to clipboard.")
 
     st.header("Detect optimal number of colors")
-    max_colors = st.number_input("Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10)
+    max_colors = st.number_input(
+        "Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10
+    )
     optimize = st.button("Optimize")
     if optimize:
         with st.spinner("Optimizing... (this can take up to a minute)"):
-            cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(max_colors=max_colors, palette_name="", random_state=random_state)
+            cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(
+                max_colors=max_colors, palette_name="", random_state=random_state
+            )
 
         figopt, ax = plt.subplots(figsize=(7, 5))
 
@@ -146,7 +152,9 @@ def main():
         ax.set_xticks([])
 
         # best
-        rect = patches.Rectangle((0, best_n_colors), ymax, 1, linewidth=1, facecolor="none", edgecolor="black", linestyle="--")
+        rect = patches.Rectangle(
+            (0, best_n_colors), ymax, 1, linewidth=1, facecolor="none", edgecolor="black", linestyle="--"
+        )
         ax.add_patch(rect)
 
         # minus 2, one for starting at 2 and one for 0-indexing
