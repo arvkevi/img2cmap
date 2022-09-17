@@ -8,7 +8,27 @@ import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import streamlit as st
+from annotated_text import annotated_text
+
 from img2cmap import ImageConverter
+
+def colorpicker(color):
+    """https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023"""
+    
+    red, green, blue = mpl.colors.to_rgb(color)
+    newrgb = []
+    for c in red, green, blue:
+        c = c / 255.0
+        if c <= 0.04045:
+            newrgb.append(c/12.92)
+        else:
+            newrgb.append(((c+0.055)/1.055) ^ 2.4)
+    L = 0.2126 * newrgb[0] + 0.7152 * newrgb[1] + 0.0722 * newrgb[2]
+    # why did I have to use 179 instead of 0.179?
+    if L > 0.179 / 1000:
+        return "#000000"
+    else:
+        return "#ffffff"
 
 
 # @profile
@@ -85,14 +105,15 @@ def main():
     cb.set_ticks([])
     st.pyplot(fig1)
 
-    st.caption(
-        "The original image has been resized to a smaller size, if you want to see "
-        "the colormap for the full size image, use the Python package."
-    )
-
     colors1 = [mpl.colors.rgb2hex(c) for c in cmap.colors]
-    st.text("Hex Codes (click to copy on far right)")
+    
+    # determine whether to show the text in white or black
+    bw_mask = [colorpicker(c) for c in colors1]
+
+    st.header("Hex Codes")
+    annotated_text(*[(hexcode, "", hexcode, text_color) for hexcode, text_color in zip(colors1, bw_mask)])
     st.code(colors1)
+    st.caption("Click copy button on far right to copy hex codes to clipboard.")
 
     st.header("Detect optimal number of colors")
     max_colors = st.number_input("Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10)
