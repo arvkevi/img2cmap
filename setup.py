@@ -73,9 +73,6 @@ setup(
         "kneed",
     ],
     extras_require={
-        "dev": ["black", "requests"],
-        # eg:
-        #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
+        "dev": ["black", "requests", "tox"],
     },
 )
