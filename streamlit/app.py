@@ -5,16 +5,17 @@ import matplotlib as mpl
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
+from annotated_text import annotated_text
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import streamlit as st
-from annotated_text import annotated_text
-
 from img2cmap import ImageConverter
 
+
 def colorpicker(color):
-    """https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color/3943023#3943023"""
-    
+    """Logic to decide between black or white text for a given background color.
+    https://stackoverflow.com/a/3943023/4541548
+    """
     red, green, blue = mpl.colors.to_rgb(color)
     newrgb = []
     for c in red, green, blue:
@@ -106,7 +107,7 @@ def main():
     st.pyplot(fig1)
 
     colors1 = [mpl.colors.rgb2hex(c) for c in cmap.colors]
-    
+
     # determine whether to show the text in white or black
     bw_mask = [colorpicker(c) for c in colors1]
 
