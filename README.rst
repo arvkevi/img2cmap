@@ -5,9 +5,6 @@ img2cmap
 Usage
 =====
 
-Basic
------
-
 **Create colormaps from images in three lines of code!**
 
 | First, ``ImageConverter`` class converts images to arrays of RGB values.
@@ -157,7 +154,7 @@ of the image.
 hexcodes
 ^^^^^^^^
 
-When running the ``generate_cmap`` or the ``generate_optimal_cmap`` methods the ImageConverter object will automatically 
+When running the ``generate_cmap`` or the ``generate_optimal_cmap`` methods the ImageConverter object will automatically
 capture the resulting hexcodes from the colormap and store them as an attribute.
 
 .. code-block:: python3
@@ -195,6 +192,14 @@ Documentation
 
 https://img2cmap.readthedocs.io/
 
+
+Web App
+=======
+
+Check out the web app at https://img2cmap.fly.dev
+
+.. image:: images/webapp_image.png
+    :align: center
 
 Status
 ======
@@ -247,6 +252,12 @@ Status
 
 Development
 ===========
+
+Install the development requirements:
+
+::
+
+    pip install img2cmap[dev]
 
 To run all the tests run::
 

@@ -5,10 +5,31 @@ import matplotlib as mpl
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
+from annotated_text import annotated_text
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import streamlit as st
 from img2cmap import ImageConverter
+
+
+def colorpicker(color):
+    """Logic to decide between black or white text for a given background color.
+    https://stackoverflow.com/a/3943023/4541548
+    """
+    red, green, blue = mpl.colors.to_rgb(color)
+    newrgb = []
+    for c in red, green, blue:
+        c = c / 255.0
+        if c <= 0.04045:
+            newrgb.append(c / 12.92)
+        else:
+            newrgb.append(((c + 0.055) / 1.055) ^ 2.4)
+    L = 0.2126 * newrgb[0] + 0.7152 * newrgb[1] + 0.0722 * newrgb[2]
+    # why did I have to use 179 instead of 0.179?
+    if L > 0.179 / 1000:
+        return "#000000"
+    else:
+        return "#ffffff"
 
 
 # @profile
@@ -38,7 +59,9 @@ def main():
         if user_image is not None:
             user_image = BytesIO(user_image.getvalue())
     elif file_or_url == "url":
-        user_image = st.sidebar.text_input("Paste an image URL", "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg")
+        user_image = st.sidebar.text_input(
+            "Paste an image URL", "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg"
+        )
     else:
         st.warning("Please select an option")
 
@@ -85,21 +108,26 @@ def main():
     cb.set_ticks([])
     st.pyplot(fig1)
 
-    st.caption(
-        "The original image has been resized to a smaller size, if you want to see "
-        "the colormap for the full size image, use the Python package."
-    )
-
     colors1 = [mpl.colors.rgb2hex(c) for c in cmap.colors]
-    st.text("Hex Codes (click to copy on far right)")
+
+    # determine whether to show the text in white or black
+    bw_mask = [colorpicker(c) for c in colors1]
+
+    st.header("Hex Codes")
+    annotated_text(*[(hexcode, "", hexcode, text_color) for hexcode, text_color in zip(colors1, bw_mask)])
     st.code(colors1)
+    st.caption("Click copy button on far right to copy hex codes to clipboard.")
 
     st.header("Detect optimal number of colors")
-    max_colors = st.number_input("Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10)
+    max_colors = st.number_input(
+        "Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10
+    )
     optimize = st.button("Optimize")
     if optimize:
         with st.spinner("Optimizing... (this can take up to a minute)"):
-            cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(max_colors=max_colors, palette_name="", random_state=random_state)
+            cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(
+                max_colors=max_colors, palette_name="", random_state=random_state
+            )
 
         figopt, ax = plt.subplots(figsize=(7, 5))
 
@@ -124,7 +152,9 @@ def main():
         ax.set_xticks([])
 
         # best
-        rect = patches.Rectangle((0, best_n_colors), ymax, 1, linewidth=1, facecolor="none", edgecolor="black", linestyle="--")
+        rect = patches.Rectangle(
+            (0, best_n_colors), ymax, 1, linewidth=1, facecolor="none", edgecolor="black", linestyle="--"
+        )
         ax.add_patch(rect)
 
         # minus 2, one for starting at 2 and one for 0-indexing
