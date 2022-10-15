@@ -20,7 +20,7 @@ project = "img2cmap"
 year = "2022"
 author = "Kevin Arvai"
 copyright = "{0}, {1}".format(year, author)
-version = release = "0.2.2"
+version = release = "0.2.3"
 
 pygments_style = "trac"
 templates_path = ["."]
