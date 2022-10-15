@@ -32,13 +32,13 @@ classifiers = [
     "Topic :: Utilities",
 ]
 keywords = ["colormap", "matplotlib", "kmeans", "data visualization"]
-
-[project.dependencies]
-matplotlib = ">=3.4.2"
-scikit-learn = ">=0.24.2"
-numpy = ">=1.20.3"
-pillow = ">=8.0.1"
-kneed = ">=0.8.1"
+dependencies = [
+  "matplotlib>=3.4.2",
+  "scikit-learn>=0.24.2",
+  "numpy>=1.20.3",
+  "pillow>=8.0.1",
+  "kneed >=0.8.1",
+]
 
 [project.optional-dependencies]
 dev = ["black", "requests", "tox"]
