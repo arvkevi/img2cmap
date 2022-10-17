@@ -1,15 +1,58 @@
 [build-system]
-requires = [
-    "setuptools>=30.3.0",
-    "wheel",
-    "matplotlib",
-    "scikit-learn",
-    "numpy",
-    "pillow",
-    "kneed"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "img2cmap"
+version = "0.2.3"
+authors = [
+  { name="Kevin Arvai", email="arvkevi@gmail.com" },
+  { name="Marshall Krassenstein", email="mpkrass@gmail.com"},
 ]
+description = "Create colormaps from images"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 2 - Pre-Alpha",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Utilities",
+]
+keywords = ["colormap", "matplotlib", "kmeans", "data visualization"]
+dependencies = [
+  "matplotlib>=3.4.2",
+  "scikit-learn>=0.24.2",
+  "numpy>=1.20.3",
+  "pillow>=8.0.1",
+  "kneed >=0.8.1",
+]
+
+[project.optional-dependencies]
+dev = ["black", "requests", "tox"]
+streamlit= ["streamlit", "st-annotated-text"]
+all = ["black", "requests", "tox", "streamlit", "st-annotated-text"]
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+"Homepage" = "https://github.com/arvkevi/kneed"
+"Bug Tracker" = "https://github.com/arvkevi/kneed/issues"
 
 [tool.black]
 line-length = 140
-target-version = ['py36']
+target-version = ['py37', 'py38', 'py39', 'py310']
 skip-string-normalization = false
