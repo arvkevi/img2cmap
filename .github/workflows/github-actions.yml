@@ -120,7 +120,6 @@ jobs:
     - name: Codecov
       uses: codecov/codecov-action@v3.1.1
       with:
-        directory: ./coverage/reports/
         fail_ci_if_error: true
         flags: unittests
         name: codecov-umbrella
