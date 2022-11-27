@@ -111,3 +111,15 @@ jobs:
         TOXPYTHON: '${{ matrix.toxpython }}'
       run: >
         tox -e ${{ matrix.tox_env }} -v
+    - name: Generate coverage report
+      run: |
+        pip install -e .[dev]
+        pip install pytest
+        pip install pytest-cov
+        pytest --cov=./ --cov-report=xml
+    - name: Codecov
+      uses: codecov/codecov-action@v3.1.1
+      with:
+        fail_ci_if_error: true
+        flags: unittests
+        name: codecov-umbrella
