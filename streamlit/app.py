@@ -1,5 +1,6 @@
 import warnings
 from io import BytesIO
+from pprint import pformat
 
 import matplotlib as mpl
 import matplotlib.patches as patches
@@ -35,7 +36,7 @@ def colorpicker(color):
 # @profile
 def main():
     warnings.filterwarnings("ignore")
-    st.set_option("deprecation.showfileUploaderEncoding", False)
+    # st.set_option("deprecation.showfileUploaderEncoding", False)
 
     st.set_page_config(
         page_title="img2cmap web",
@@ -59,9 +60,7 @@ def main():
         if user_image is not None:
             user_image = BytesIO(user_image.getvalue())
     elif file_or_url == "url":
-        user_image = st.sidebar.text_input(
-            "Paste an image URL", "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg"
-        )
+        user_image = st.sidebar.text_input("Paste an image URL", "https://static1.bigstockphoto.com/3/2/3/large1500/323952496.jpg")
     else:
         st.warning("Please select an option")
 
@@ -81,7 +80,7 @@ def main():
     random_state = st.sidebar.number_input("Random state", value=42, help="Random state for reproducibility")
     random_state = int(random_state)
 
-    @st.cache(allow_output_mutation=True)
+    @st.cache_data
     def get_image_converter(user_image, remove_transparent):
         converter = ImageConverter(user_image)
         if remove_transparent:
@@ -117,17 +116,13 @@ def main():
     annotated_text(*[(hexcode, "", hexcode, text_color) for hexcode, text_color in zip(colors1, bw_mask)])
     st.code(colors1)
     st.caption("Click copy button on far right to copy hex codes to clipboard.")
-
     st.header("Detect optimal number of colors")
-    max_colors = st.number_input(
-        "Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10
-    )
+    col1, _, _, _, _ = st.columns(5)
+    max_colors = col1.number_input("Max number of colors in cmap (more colors = longer runtime)", min_value=2, max_value=20, value=10)
     optimize = st.button("Optimize")
     if optimize:
         with st.spinner("Optimizing... (this can take up to a minute)"):
-            cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(
-                max_colors=max_colors, palette_name="", random_state=random_state
-            )
+            cmaps, best_n_colors, ssd = converter.generate_optimal_cmap(max_colors=max_colors, palette_name="", random_state=random_state)
 
         figopt, ax = plt.subplots(figsize=(7, 5))
 
@@ -152,9 +147,7 @@ def main():
         ax.set_xticks([])
 
         # best
-        rect = patches.Rectangle(
-            (0, best_n_colors), ymax, 1, linewidth=1, facecolor="none", edgecolor="black", linestyle="--"
-        )
+        rect = patches.Rectangle((0, best_n_colors), ymax, 1, linewidth=1, facecolor="none", edgecolor="black", linestyle="--")
         ax.add_patch(rect)
 
         # minus 2, one for starting at 2 and one for 0-indexing
@@ -163,9 +156,8 @@ def main():
         st.metric("Optimal number of colors", best_n_colors)
         st.text("Hex Codes of optimal colormap (click to copy on far right)")
         st.code(sorted([mpl.colors.rgb2hex(c) for c in cmaps[best_n_colors].colors]))
-
-        st.text("Sum of squared distances by number of colors:")
-        st.write(ssd)
+        st.text("Hex Codes of all colormaps {k: [hex codes]}")
+        st.code(pformat({k: sorted([mpl.colors.rgb2hex(c) for c in v.colors]) for k, v in cmaps.items()}))
 
 
 if __name__ == "__main__":

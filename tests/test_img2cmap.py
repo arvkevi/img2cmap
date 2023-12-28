@@ -67,7 +67,6 @@ def test_cmap_optimal_plot(test_image_input):
     imageconverter = ImageConverter(test_image_input)
     cmaps, _, _ = imageconverter.generate_optimal_cmap(random_state=42)
     for _, cmap_ in cmaps.items():
-
         assert not np.any(np.all(np.isclose(cmap_.colors, 1, atol=1e-9)))
         assert not np.any(np.all(np.isclose(cmap_.colors, 0, atol=1e-9)))
 
@@ -135,6 +134,6 @@ def test_compute_optimal_hexcodes():
 
 
 def test_break_kneed():
-    with pytest.raises(UserWarning):
+    with pytest.raises(ValueError):
         imageconverter = ImageConverter(image_urls[0])
-        imageconverter.generate_optimal_cmap(max_colors=5, random_state=42)
+        imageconverter.generate_optimal_cmap(max_colors=1, random_state=42)

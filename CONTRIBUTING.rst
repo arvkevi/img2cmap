@@ -53,7 +53,7 @@ To set up `img2cmap` for local development:
 
     pip install img2cmap[dev]
 
-5. When you're done making changes run all the checks and docs builder with `tox <https://tox.readthedocs.io/en/latest/install.html>`_ one command::
+5. When you're done making changes run all the checks and docs builder with `tox <https://tox.wiki/en/latest/installation.html>`_ one command::
 
     tox
 

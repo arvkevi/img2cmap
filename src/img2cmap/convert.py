@@ -62,7 +62,7 @@ class ImageConverter:
             matplotlib.colors.ListedColormap: A matplotlib ListedColormap object.
         """
         # create a kmeans model
-        self.kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=random_state)
+        self.kmeans = MiniBatchKMeans(n_clusters=n_colors, random_state=random_state, n_init=3)
         # fit the model to the pixels
         self.kmeans.fit(self.pixels)
         # get the cluster centers
