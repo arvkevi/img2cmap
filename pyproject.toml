@@ -42,7 +42,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["black", "requests", "tox"]
-streamlit= ["streamlit", "st-annotated-text"]
+streamlit= ["streamlit>=1.29.0", "st-annotated-text"]
 all = ["black", "requests", "tox", "streamlit", "st-annotated-text"]
 
 [project.license]
